@@ -5,7 +5,6 @@ from __future__ import annotations
 import json
 import logging
 from dataclasses import dataclass, field
-from pathlib import Path
 
 import pandas as pd
 
@@ -134,7 +133,3 @@ def run(cfg: Config, regenerate: bool = False) -> PipelineOutputs:
     )
     (out / "artifacts.json").write_text(json.dumps(artifacts, indent=2))
     return outputs
-
-
-def output_path(cfg: Config, name: str) -> Path:
-    return cfg.output_dir / name
