@@ -52,7 +52,7 @@ def render(outputs: PipelineOutputs) -> str:
         "### Log-rank tests",
         _table(pd.DataFrame(outputs.logrank), ".4g"),
         "### Cox hazard ratios",
-        _table(outputs.cox_summary.reset_index().rename(columns={"covariate": "covariate"})),
+        _table(outputs.cox_summary.reset_index()),
         "## 4. Lifetime value",
         "### CLV by segment",
         _table(outputs.clv_by_segment, ".2f"),
