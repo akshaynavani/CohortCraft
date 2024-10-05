@@ -86,11 +86,11 @@ def generate(
     # --- churn: exponential lifetime (days) with engagement-dependent hazard
     base_monthly_hazard = 0.06
     hazard = base_monthly_hazard * np.exp(-0.7 * engagement)
-    lifetime_days = rng.exponential(30.44 / hazard)
+    lifetime_days = np.minimum(rng.exponential(30.44 / hazard), 20_000)
     churn_date = signup + pd.to_timedelta(lifetime_days.round(), unit="D")
     churned = churn_date <= snapshot
-    end_obs = pd.Series(np.where(churned, churn_date, snapshot), dtype="datetime64[ns]")
-    duration_days = (end_obs.values - signup.values) / np.timedelta64(1, "D")
+    end_obs = churn_date.where(churned, snapshot)
+    duration_days = np.asarray((end_obs - signup).days, dtype=float)
 
     customers = pd.DataFrame(
         {
